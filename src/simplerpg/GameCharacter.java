@@ -141,7 +141,7 @@ public class GameCharacter implements Cloneable  {
         if(Utils.rand.nextInt(100) < tAvoidChance)
         {
             System.out.println(name + " увернулся от атаки");
-            attackAvoided = true;
+            setAttackAvoided();
         }
         else
         {
