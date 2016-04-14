@@ -92,11 +92,11 @@ public class Hero extends GameCharacter { // Класс "герой" насле�
     public void showFullInfo() // Вывод инфо по персонажу
     {
         System.out.println("Имя: " + name + " Здоровье: " + hp + "/" + hpMax + " Уровень: " + level + "[" +currentExp + " / " + expToNextLevel + "]");
-        System.out.println("Атака: " + attack + " Шанс крита(множитель): " + critChance + "(" + critMultiplier + ") " + "Уклонение%: " + avoidChance);
+        System.out.println("Атака: " + attack + " Защита: " + defense + " Шанс крита(множитель): " + critChance + "(" + critMultiplier + ") " + "Уклонение%: " + avoidChance);
     }
 
     public int getAction(int _min, int _max, String _str) { // Защита от неверного ввода
-        int x = 0;
+        int x;
         do {
             if (_str != "") {
                 System.out.println(_str);

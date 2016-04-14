@@ -27,10 +27,14 @@ public class GameCharacter implements Cloneable  {
     protected int critChance;
     protected float critMultiplier;
     protected int avoidChance;
-    
+
+    protected int tDefense;
+    protected int tAvoidChance;
+
     protected int level;
     protected int hp;
     protected boolean blockStance;
+    protected boolean attackAvoided;
     protected boolean life;
     public boolean isAlive()
     {
@@ -61,9 +65,9 @@ public class GameCharacter implements Cloneable  {
         attack = strength * 4;
         hpMax = endurance * 50;
         defense = (int)((strength + dexterity) / 4.0f);
-        critChance = dexterity * 1;
-        critMultiplier = 1.2f + (float)(dexterity / 20.0f);
-        avoidChance = 8 + (int)(dexterity / 5.0f);
+        critChance = dexterity;
+        critMultiplier = 1.2f + (dexterity / 20.0f);
+        avoidChance = (int)(21*Math.log(0.085*dexterity+1));
     }
     
     public void showInfo() // Вывод инфо по персонажу
@@ -71,12 +75,16 @@ public class GameCharacter implements Cloneable  {
         System.out.println("Имя: " + name + " Здоровье: " + hp + "/" + hpMax);
     }
 
-    public void setBlockStance() // Включение защитной стойки
-    {
+    public void setBlockStance(){ // Включение защитной стойки
+
         blockStance = true;
         System.out.println(name + " стал в защитную стойку");
     }
-    
+
+    public void setAttackAvoided (){
+        attackAvoided = true;
+        System.out.println(name + " успешно увернулся от атаки и готов контратаковать(крит шанс=100%)");
+    }
     public void cure(int _val)
     {
         hp += _val;
@@ -106,8 +114,12 @@ public class GameCharacter implements Cloneable  {
         int minAttack = (int)(attack * 0.8f);
         int deltaAttack = (int)(attack * 0.4f);
         int currentAttack = minAttack + Utils.rand.nextInt(deltaAttack); // Делаем разброс атаки 80-120%
-        if(Utils.rand.nextInt(100) < critChance) // Проверяем условие на срабатывание критического удара
-        {            
+        if(attackAvoided) {
+            currentAttack = (int)(currentAttack * critMultiplier); // Если крит сработал, умножаем атаку на 2
+            System.out.println(name + " провел критический удар в размере " + currentAttack + " ед. урона");
+        }
+        else if(Utils.rand.nextInt(100) < critChance) // Проверяем условие на срабатывание критического удара
+        {
             currentAttack = (int)(currentAttack * critMultiplier); // Если крит сработал, умножаем атаку на 2
             System.out.println(name + " провел критический удар в размере " + currentAttack + " ед. урона");
         }
@@ -115,27 +127,32 @@ public class GameCharacter implements Cloneable  {
             System.out.println(name + " провел атаку на " + currentAttack + " ед. урона");
         return currentAttack; // возвращаем полученное значение атаки
     }
-    
+
     public void getDamage(int _inputDamage) // Метод получения урона
     {   
-        if(Utils.rand.nextInt(100) < avoidChance)
+        if (blockStance) {
+            tAvoidChance = avoidChance * 2;
+            tDefense = defense * 2;
+        }
+        else {
+            tAvoidChance = avoidChance;
+            tDefense = defense;
+        }
+        if(Utils.rand.nextInt(100) < tAvoidChance)
         {
-            System.out.println(name + " увернулся от атаки");  
+            System.out.println(name + " увернулся от атаки");
+            attackAvoided = true;
         }
         else
         {
-            _inputDamage -= Utils.rand.nextInt(defense); // из входящего урона вычитается значение защиты
-            if (blockStance) // если включена защитная стойка - снижаем входящий урон еще раз
-            {            
-                System.out.println(name + " заблокировал часть урона");
-                _inputDamage -= Utils.rand.nextInt(defense);
-            }
-            if (_inputDamage < 0) _inputDamage = 0; // делаем прверку на отрицательный урон, для предотвращения эффекта лечения
+            _inputDamage = (int)(_inputDamage*(100.0f / (100.0f + tDefense)));
             System.out.println(name + " получил " + _inputDamage + " ед. урона");
+
             hp -= _inputDamage; // снижаем уровень здоровья
-            if(hp < 1) // если здоровье опускается ниже 0
+            if (hp < 1) // если здоровье опускается ниже 0
                 life = false; // переключаем life = false
         }
+
     }
     
     public void useItem(String _item)
