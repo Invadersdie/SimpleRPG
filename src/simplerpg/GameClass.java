@@ -207,12 +207,10 @@ public class GameClass {
     {
         shop.showItems();
         System.out.println("Для выхода из магазина нажмите 0");
-        int x = getAction(0, shop.ITEMS_COUNT, "Введите номер покупаемого товара");
+        int x = Utils.getAction(0, shop.ITEMS_COUNT, "Введите номер покупаемого товара");
         if (x == 0) return;
         shop.buyByHero(x - 1, mainHero);
     }
-
-
 
     public int getAction(int _min, int _max, String _str) { // Защита от неверного ввода
         int x;
