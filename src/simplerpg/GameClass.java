@@ -15,6 +15,7 @@ public class GameClass {
     public GameClass() {
         initGame();
     }
+
     public void initGame() // Инициализируем начальное состояние игры
     {
         // Задаем шаблоны героев и монстров
@@ -26,6 +27,7 @@ public class GameClass {
         monsterPattern[2] = new Monster("Humanoid", "Troll", 32, 12, 10);
         currentRound = 1;
     }
+
     public void mainGameLoop() // Метод, отвечающий за игровую логику
     {
         map = new GameMap();
