@@ -8,22 +8,22 @@ public class Item {
     private String name;
     private ItemType type;
     
-    public ItemType getType()
-    {
-        return type;
-    }
-    
-    public String getName()
-    {
-        return name;
-    }
-    
+
     public Item(String _name, ItemType _type)
     {
         name = _name;
         type = _type;
     }
-    
-    
-    
+    public ItemType getType()
+    {
+        return type;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+
+
 }

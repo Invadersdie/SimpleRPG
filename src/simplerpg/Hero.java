@@ -57,7 +57,7 @@ public class Hero extends GameCharacter { // Класс "герой" насле�
             System.out.println("Закаленный в боях " + name + " повысил уровень до " + level);
             int points = 6 + level*2;
             currentExp -= expToNextLevel;
-            expToNextLevel *= 2;
+            expToNextLevel *= 1.2;
             do {
                 int x = getAction(1, 3, "Выберите какой из параметров повышать : 1.Сила 2.Ловкость 3.Выносливость; Осталось распределить: " + points);
                 int y = getAction(1, points, "Сколько очков?");
