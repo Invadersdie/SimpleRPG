@@ -15,72 +15,105 @@ public class GameClass {
     public GameClass() {
         initGame();
     }
-
+    public void initGame() // Инициализируем начальное состояние игры
+    {
+        // Задаем шаблоны героев и монстров
+        heroPattern[0] = new Hero("Knight", "Lancelot", 16, 8, 12);
+        heroPattern[1] = new Hero("Barbarian", "Konan", 16, 8, 12);
+        heroPattern[2] = new Hero("Dwarf", "Gimli", 16, 8, 12);
+        monsterPattern[0] = new Monster("Humanoid", "Goblin", 12, 4, 4);
+        monsterPattern[1] = new Monster("Humanoid", "Orc", 18, 6, 6);
+        monsterPattern[2] = new Monster("Humanoid", "Troll", 32, 12, 10);
+        currentRound = 1;
+    }
     public void mainGameLoop() // Метод, отвечающий за игровую логику
     {
         map = new GameMap();
-        shop = new InGameShop();        
+        shop = new InGameShop();
         inpInt = 0;
         System.out.println("Игра началась!");
         selectHero();
         mainHero.setXY(10, 3);
         map.buildDangMap(10, 3);
-        map.updateMap(mainHero.getX(), mainHero.getY());
-        map.showMap();
-        while (true) {
-            int x = getAction(1, 7, "Что Вы хотите делать дальше 1. Пойти влево; 2. Пойти вправо; 3. Пойти вверх; 4. Пойти вниз; 5. Найти монстров; 6. Информация о герое; 7. Отдохнуть;");
-            
-            switch (x) {
-                case 1:
-                    if(map.isCellEmpty(mainHero.getX() - 1, mainHero.getY()))
-                        mainHero.moveHero(-1, 0);
-                    break;
-                case 2:
-                    if(map.isCellEmpty(mainHero.getX() + 1, mainHero.getY()))
-                        mainHero.moveHero(1, 0);
-                    break;
-                case 3:
-                    if(map.isCellEmpty(mainHero.getX(), mainHero.getY() - 1))
-                        mainHero.moveHero(0, -1);
-                    break;
-                case 4:
-                    if(map.isCellEmpty(mainHero.getX(), mainHero.getY() + 1))
-                        mainHero.moveHero(0, 1);
-                    break;
-                case 5:
-                    currentMonster = (Monster) monsterPattern[1].clone();  // Создаем монстра путем копирования из шаблона                               
-                    currentMonster.lvlUp(map.getDangerous(mainHero.getX(), mainHero.getY()));
-                    battle(mainHero, currentMonster);
-                    break;
-                case 6:
-                    mainHero.showFullInfo();
-                    break;
-                case 7:
-                    mainHero.fullHeal();
-                    System.out.println("Ваш герой отдохнул и снова готов в бой");
-                    mainHero.showInfo();
-                    break;
-            }
 
-            if(map.getObstValue(mainHero.getX(), mainHero.getY()) == 'S')  //Открытие магазина по достижению "S"
-                shopAction();
-            
-            if(Utils.rand.nextInt(100) < 3)                             //Невероятный рандом 2% нападения монстра
-            {
-                System.out.println("На Вас внезапно напали!!!");
-                currentMonster = (Monster) monsterPattern[1].clone();  // Создаем монстра путем копирования из шаблона                               
-                currentMonster.lvlUp(map.getDangerous(mainHero.getX(), mainHero.getY()));
-                battle(mainHero, currentMonster); 
+        while (true) {
+
+            int x = getAction(0, 4, "Что Вы хотите делать дальше 1. Посмотреть карту; 2. Открыть инвентарь; 3. Информация о герое; 4. Отдохнуть; 5. Померяться силами с монстром; 0. Завершить игру;");
+            if (x == 1) {
+                int y = 1;
+                while (y != 0) {
+                    if (!mainHero.isAlive()) {
+                        break;
+                    }
+                    map.updateMap(mainHero.getX(), mainHero.getY());
+                    if (map.getObstValue(mainHero.getX(), mainHero.getY()) == 'S')  //Открытие магазина по достижению "S"
+                        shopAction();
+                    map.showMap();
+                    y = getAction(0, 7, "Ваши дальнейшие действия: 1. Пойти влево; 2. Пойти вправо; 3. Пойти вверх; 4. Пойти вниз; 5. Найти монстров; 6. Восстановить силы; 0. Назад;");
+                    switch (y) {
+                        case 1:
+                            if (map.isCellEmpty(mainHero.getX() - 1, mainHero.getY()))
+                                mainHero.moveHero(-1, 0);
+                            break;
+                        case 2:
+                            if (map.isCellEmpty(mainHero.getX() + 1, mainHero.getY()))
+                                mainHero.moveHero(1, 0);
+                            break;
+                        case 3:
+                            if (map.isCellEmpty(mainHero.getX(), mainHero.getY() - 1))
+                                mainHero.moveHero(0, -1);
+                            break;
+                        case 4:
+                            if (map.isCellEmpty(mainHero.getX(), mainHero.getY() + 1))
+                                mainHero.moveHero(0, 1);
+                            break;
+                        case 5:
+                            currentMonster = (Monster) monsterPattern[1].clone();  // Создаем монстра путем копирования из шаблона
+                            currentMonster.lvlUp(map.getDangerous(mainHero.getX(), mainHero.getY()));
+                            battle(mainHero, currentMonster);
+                            break;
+                        case 0:
+                            break;
+
+                    }
+                    if (Utils.rand.nextInt(100) < 3)                             //Невероятный рандом 3% нападения монстра
+                    {
+                        System.out.println("На Вас внезапно напали!!!");
+                        currentMonster = (Monster) monsterPattern[1].clone();  // Создаем монстра путем копирования из шаблона
+                        currentMonster.lvlUp(map.getDangerous(mainHero.getX(), mainHero.getY()));
+                        battle(mainHero, currentMonster);
+                    }
+                }
             }
-            
-            map.updateMap(mainHero.getX(), mainHero.getY());
-            map.showMap();
-            
             if (!mainHero.isAlive()) {
                 break;
             }
-        }
+            if (x == 2) {
+                mainHero.myInv.showAllItems();
+                int invInput = getAction(0, mainHero.myInv.getSize(), "Выберите предмет для использования");
+                String usedItem = mainHero.myInv.useItem(invInput);
+                if (usedItem != "") {
+                    System.out.println(mainHero.getName() + " использовал " + usedItem);
+                    mainHero.useItem(usedItem);
+                }
+            }
 
+
+            if (x == 3) {
+                mainHero.showFullInfo();
+            }
+            if (x == 4) {
+                mainHero.fullHeal();
+                System.out.println("Ваш герой отдохнул и снова готов в бой");
+                mainHero.showInfo();
+            }
+            if (x == 5) {
+                currentMonster = (Monster) monsterPattern[1].clone();  // Создаем монстра путем копирования из шаблона
+                currentMonster.lvlUp(map.getDangerous(mainHero.getX(), mainHero.getY()));
+                battle(mainHero, currentMonster);
+            }
+
+        }
         System.out.println("Игра завершена");
     }
 
@@ -133,7 +166,7 @@ public class GameClass {
                 }
             }
             if (inpInt == 0) {
-                if (Utils.rand.nextInt(100)<5) {
+                if (Utils.rand.nextInt(100) < 5) {
                     break;
                 }// Уход из боя
                 else {
@@ -169,9 +202,9 @@ public class GameClass {
             System.out.println("Победил " + m.getName());
         }
     } //Неправильная работа после убийства монстра
-    
+
     public void shopAction() //Покупка в магазине
-    {        
+    {
         shop.showItems();
         System.out.println("Для выхода из магазина нажмите 0");
         int x = getAction(0, shop.ITEMS_COUNT, "Введите номер покупаемого товара");
@@ -179,20 +212,10 @@ public class GameClass {
         shop.buyByHero(x - 1, mainHero);
     }
 
-    public void initGame() // Инициализируем начальное состояние игры
-    {
-        // Задаем шаблоны героев и монстров
-        heroPattern[0] = new Hero("Knight", "Lancelot", 16, 8, 12);
-        heroPattern[1] = new Hero("Barbarian", "Konan", 16, 8, 12);
-        heroPattern[2] = new Hero("Dwarf", "Gimli", 16, 8, 12);
-        monsterPattern[0] = new Monster("Humanoid", "Goblin", 12, 4, 4);
-        monsterPattern[1] = new Monster("Humanoid", "Orc", 18, 6, 6);
-        monsterPattern[2] = new Monster("Humanoid", "Troll", 32, 12, 10);
-        currentRound = 1;
-    }
+
 
     public int getAction(int _min, int _max, String _str) { // Защита от неверного ввода
-        int x = 0;
+        int x;
         do {
             if (_str != "") {
                 System.out.println(_str);

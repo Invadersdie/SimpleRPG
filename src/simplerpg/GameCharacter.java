@@ -27,6 +27,7 @@ public class GameCharacter implements Cloneable  {
     protected int critChance;
     protected float critMultiplier;
     protected int avoidChance;
+    protected int lucky;
 
     protected int tDefense;
     protected int tAvoidChance;
@@ -62,9 +63,9 @@ public class GameCharacter implements Cloneable  {
     
     public void calculateSecondaryParameters()
     {
-        attack = strength * 4;
+        attack = strength * 3;
         hpMax = endurance * 50;
-        defense = (int)((strength + dexterity) / 4.0f);
+        defense = (int)(strength/2.0f + dexterity / 4.0f);
         critChance = dexterity;
         critMultiplier = 1.2f + (dexterity / 20.0f);
         avoidChance = (int)(21*Math.log(0.085*dexterity+1));
@@ -85,13 +86,23 @@ public class GameCharacter implements Cloneable  {
         attackAvoided = true;
         System.out.println(name + " успешно увернулся от атаки и готов контратаковать(крит шанс=100%)");
     }
+    public void gotLucky(int _val){
+        lucky = _val;
+        System.out.println(name + " познал дзен и стал нереально удачным(" + _val + "% к удаче");
+    }
+
     public void cure(int _val)
     {
         hp += _val;
-        if(hp > hpMax) hp = hpMax;
+        if(hp > hpMax) {
+            int x = hpMax-hp;
+            hp = hpMax;
+            System.out.println(name + "не смог восполнить здоровье выше максимального и исцелился всего на " + x + " ед.");
+        }
+        System.out.println(name + " пополнил здоровье на " + _val + " ед.");
     }
     
-    public Object clone() // Копирование объектов 
+    public Object clone() // Копирование объектов
     {  
         try
         {
@@ -161,12 +172,13 @@ public class GameCharacter implements Cloneable  {
         {
             case "Слабое зелье лечения":
                 cure(120);
-                System.out.println(name + " пополнил здоровье на 120 ед.");
                 break;
             case "Слабый камень здоровья":
                 cure(60);
-                System.out.println(name + " пополнил здоровье на 60 ед.");
-                break;  
+                break;
+            case "Малый камень удачи":
+                gotLucky(30);
+                break;
         }
     }
     
