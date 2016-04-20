@@ -2,8 +2,8 @@ package simplerpg;
 
 public class Monster extends GameCharacter {
 
-    public Monster(CharClass _monsterClass, String _name) {
-        super(_monsterClass, _name);
+    public Monster( String _name,double strength,double dexterity, double endurance) {
+        super(_name,strength,dexterity,endurance, 2, 2, 2);
         myInv = new Inventory();
         myInv.add(new Item("Слабое зелье лечения", Item.ItemType.Consumables));
         myInv.addSomeCoins(100);

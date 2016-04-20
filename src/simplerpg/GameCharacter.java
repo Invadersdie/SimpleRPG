@@ -8,13 +8,20 @@ public class GameCharacter implements Cloneable {
         return name;
     }
 
-    protected CharClass charClass;
+    protected Hero charClass;
 
     protected int hpMax; // Secondary stats
 
     public int getHpMax() {
         return hpMax;
     }
+
+    protected double strength;
+    protected double dexterity;
+    protected double endurance;
+    protected double strMulti;
+    protected double dexMulti;
+    protected double endMulti;
 
     protected int attack;
     protected int defense;
@@ -43,9 +50,14 @@ public class GameCharacter implements Cloneable {
 
     protected Inventory myInv;
 
-    public GameCharacter(CharClass _charClass, String _name) {
+    public GameCharacter(String _name, double _strength, double _dexterity, double _endurance, double strMulti, double dexMulti, double endMulti) {
+        this.strMulti = strMulti;
+        this.dexMulti = dexMulti;
+        this.endMulti = endMulti;
         name = _name;
-        charClass = _charClass;
+        strength = _strength;
+        dexterity = _dexterity;
+        endurance = _endurance;
         calculateParameters();
         level = 1;
         hp = hpMax;
@@ -54,19 +66,30 @@ public class GameCharacter implements Cloneable {
     }
 
     public void calculateParameters() {
-        attack = (int) (charClass.getStrength() * 5);
-        hpMax = (int) (charClass.getEndurance() * 50);
-        defense = (int) (charClass.getStrength() / 2.0 + charClass.getEndurance() / 2.0);
-        critChance = (int) (100 - 10000 / (100 + charClass.getDexterity()));
-        critMultiplier = 2 + (0.3 * Math.log(charClass.getDexterity() / 20 + 1));
-        avoidChance = (int) (10 * Math.log(0.085 * charClass.getDexterity() + 1));
+        attack = (int) (strength * 5);
+        hpMax = (int) (endurance * 30);
+        defense = (int) (strength / 4.0 + endurance / 2.0);
+        critChance = (int) (100 - 10000 / (100 + dexterity));
+        critMultiplier = 2 + (0.3 * Math.log(dexterity / 20 + 1));
+        avoidChance = (int) (10 * Math.log(0.085 * dexterity + 1));
     }
+
+    public void addStrength(double amount) {
+        strength += amount * strMulti;
+    }
+    public void addDexterity(double amount) {
+        dexterity += amount * dexMulti;
+    }
+    public void addEndurance(double amount) {
+        endurance += amount * endMulti;
+    }
+
 
     public void showFullInfo() // Вывод инфо по персонажу
     {
         System.out.println("Имя: " + name + " Здоровье: " + hp + "/" + hpMax + " Уровень: " + level);
         System.out.println("Атака: " + attack + " Защита: " + defense + " Шанс крита(множитель): " + critChance + "(" + critMultiplier + ") " + "Уклонение%: " + avoidChance);
-        System.out.println(charClass.getStrength() + " " + charClass.getDexterity() + " " + charClass.getEndurance());
+        System.out.println(strength + " " + dexterity + " " + endurance);
     }
 
     public void showInfo() // Вывод инфо по персонажу
@@ -80,7 +103,8 @@ public class GameCharacter implements Cloneable {
         tDefense = defense * 2;
         System.out.println(name + " стал в защитную стойку");
     }
-    public void disableBlockStance(){
+
+    public void disableBlockStance() {
         blockStance = false;
         tAvoidChance = avoidChance;
         tDefense = defense;
@@ -156,6 +180,7 @@ public class GameCharacter implements Cloneable {
                 life = false; // переключаем life = false
         }
     }
+
     public void useItem(String _item) {
         switch (_item) {
             case "Слабое зелье лечения":

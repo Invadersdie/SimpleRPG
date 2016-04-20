@@ -36,8 +36,8 @@ public class Hero extends GameCharacter { // Класс "герой" насле�
 //        System.out.println("Герой перешел в зону опасности " + currentZone);
 //    }
 
-    public Hero(CharClass _charClass, String _name) {
-        super(_charClass, _name);
+    public Hero(String _name, double strength, double dexterity, double endurance,double strMulti,double dexMulti,double endMulti) {
+        super(_name,strength,dexterity,endurance, strMulti, dexMulti, endMulti);
         currentZone = 0;
         currentExp = 0;
         expToNextLevel = 1000;
@@ -62,9 +62,9 @@ public class Hero extends GameCharacter { // Класс "герой" насле�
             do {
                 int x = Utils.getAction(1, 3, "Выберите какой из параметров повышать : 1.Сила 2.Ловкость 3.Выносливость; Осталось распределить: " + points);
                 int y = Utils.getAction(1, points, "Сколько очков?");
-                if (x == 1) charClass.addStrength(y);
-                if (x == 2) charClass.addDexterity(y);
-                if (x == 3) charClass.addEndurance(y);
+                if (x == 1) addStrength(y);
+                if (x == 2) addDexterity(y);
+                if (x == 3) addEndurance(y);
                 points -= y;
             } while (points > 0);
             calculateParameters();

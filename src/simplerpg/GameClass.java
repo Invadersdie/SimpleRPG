@@ -9,9 +9,7 @@ public class GameClass {
     private GameMap map;
     private InGameShop shop;
     private int currentRound;
-    private CharClass Warrior;
-    private CharClass Assassin;
-    private CharClass Tank;
+
     private int inpInt;
 
     public GameClass() {
@@ -20,15 +18,12 @@ public class GameClass {
 
     public void initGame() // Инициализируем начальное состояние игры
     {
-        Warrior = new CharClass(25, 10, 25, 2.5, 1.5, 2);
-        Assassin = new CharClass(15, 20, 15, 2, 2.5, 1.5);
-        Tank = new CharClass(15, 20, 35, 2, 1, 3);
 
         // Задаем шаблоны монстров
 
-        monsterPattern[0] = new Monster(Warrior, "Goblin");
-        monsterPattern[1] = new Monster(Assassin, "Orc");
-        monsterPattern[2] = new Monster(Tank, "Troll");
+        monsterPattern[0] = new Monster( "Goblin", 30,10,30);
+        monsterPattern[1] = new Monster( "Orc", 20,15,35);
+//        monsterPattern[2] = new Monster(objTank, "Troll");
         currentRound = 1;
         map = new GameMap();
         shop = new InGameShop();
@@ -52,26 +47,28 @@ public class GameClass {
         System.out.println("Введите имя героя: ");
         String name = Utils.sc.next();
         int x = Utils.getAction(1, 3, "Выберите класс: 1.Воин 2.Убийца 3.Танк ");
-        CharClass classHero;
         switch (x) {
             case 1: {
-                classHero = Warrior;
+                mainHero = new Warrior(name, 25, 10, 25);
                 break;
             }
             case 2: {
-                classHero = Assassin;
+                mainHero = new Assassin(name, 25, 10, 25);
                 break;
             }
             case 3: {
-                classHero = Tank;
+                mainHero = new Tank(name, 25, 10, 25);
                 break;
             }
             default: {
-                classHero = Warrior;
+                mainHero = new Warrior(name, 25, 10, 25);
                 break;
             }
         }
-        mainHero = new Hero(classHero, name); // Создаем героя путем копирования из шаблона
+
+
+
+
         mainHero.setXY(10, 3);
         map.buildDangMap(10, 3);
         System.out.println(mainHero.getName() + " начал свое путешествие");
@@ -147,7 +144,7 @@ public class GameClass {
         }
         if (!m.isAlive()) {
             System.out.println("Победил " + h.getName());
-            monsterPattern[1] = new Monster(Assassin, "Orc");
+            monsterPattern[1] = new Monster("Goblin", 25,15,20);
         }
         if (!h.isAlive()) {
             System.out.println("Победил " + m.getName());
