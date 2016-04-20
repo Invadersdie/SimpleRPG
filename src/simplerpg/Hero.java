@@ -36,8 +36,8 @@ public class Hero extends GameCharacter { // Класс "герой" насле�
 //        System.out.println("Герой перешел в зону опасности " + currentZone);
 //    }
 
-    public Hero(String _name, double strength, double dexterity, double endurance,double strMulti,double dexMulti,double endMulti) {
-        super(_name,strength,dexterity,endurance, strMulti, dexMulti, endMulti);
+    public Hero(String _name, double strength, double dexterity, double endurance, double strMulti, double dexMulti, double endMulti) {
+        super(_name, strength, dexterity, endurance, strMulti, dexMulti, endMulti);
         currentZone = 0;
         currentExp = 0;
         expToNextLevel = 1000;

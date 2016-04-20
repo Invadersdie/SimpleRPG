@@ -26,13 +26,6 @@ public class Assassin extends Hero {
 
     public void getDamage(int _inputDamage) // Метод получения урона
     {
-        if (blockStance) {
-            tAvoidChance = avoidChance * 2;
-            tDefense = defense * 2;
-        } else {
-            tAvoidChance = avoidChance;
-            tDefense = defense;
-        }
         if (Utils.rand.nextInt(100) < tAvoidChance) {
             System.out.println(name + " увернулся от атаки");
             setAttackAvoided();

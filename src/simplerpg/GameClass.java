@@ -21,8 +21,8 @@ public class GameClass {
 
         // Задаем шаблоны монстров
 
-        monsterPattern[0] = new Monster( "Goblin", 30,10,30);
-        monsterPattern[1] = new Monster( "Orc", 20,15,35);
+        monsterPattern[0] = new Monster("Goblin", 30, 10, 30);
+        monsterPattern[1] = new Monster("Orc", 20, 15, 35);
 //        monsterPattern[2] = new Monster(objTank, "Troll");
         currentRound = 1;
         map = new GameMap();
@@ -65,8 +65,6 @@ public class GameClass {
                 break;
             }
         }
-
-
 
 
         mainHero.setXY(10, 3);
@@ -144,7 +142,7 @@ public class GameClass {
         }
         if (!m.isAlive()) {
             System.out.println("Победил " + h.getName());
-            monsterPattern[1] = new Monster("Goblin", 25,15,20);
+            monsterPattern[1] = new Monster("Goblin", 25, 15, 20);
         }
         if (!h.isAlive()) {
             System.out.println("Победил " + m.getName());

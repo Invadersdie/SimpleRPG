@@ -77,9 +77,11 @@ public class GameCharacter implements Cloneable {
     public void addStrength(double amount) {
         strength += amount * strMulti;
     }
+
     public void addDexterity(double amount) {
         dexterity += amount * dexMulti;
     }
+
     public void addEndurance(double amount) {
         endurance += amount * endMulti;
     }

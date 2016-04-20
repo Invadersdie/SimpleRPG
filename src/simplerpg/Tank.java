@@ -4,8 +4,8 @@ package simplerpg;
  * Created by Михаил on 18.04.2016.
  */
 public class Tank extends Hero {
-    public Tank(String _name,double strength,double dexterity, double endurance) {
-        super( _name,strength, dexterity, endurance, 2, 1, 3);
+    public Tank(String _name, double strength, double dexterity, double endurance) {
+        super(_name, strength, dexterity, endurance, 2, 1, 3);
     }
 
     public int makeAttack() {
@@ -26,13 +26,6 @@ public class Tank extends Hero {
 
     public void getDamage(int _inputDamage) // Метод получения урона
     {
-        if (blockStance) {
-            tAvoidChance = avoidChance * 2;
-            tDefense = defense * 2;
-        } else {
-            tAvoidChance = avoidChance;
-            tDefense = defense;
-        }
         if (Utils.rand.nextInt(100) < tAvoidChance) {
             System.out.println(name + " увернулся от атаки");
             setAttackAvoided();
