@@ -17,5 +17,5 @@ public class Utils {
         } while (x < _min || x > _max);
         return x;
     }
-    
 }
+    

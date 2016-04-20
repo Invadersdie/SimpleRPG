@@ -27,6 +27,10 @@ public class Inventory {
         return false;
     }
 
+    public int currentGold() {
+        return gold;
+    }
+
     public void add(Item _newItem) {
         inv.add(_newItem);
     }

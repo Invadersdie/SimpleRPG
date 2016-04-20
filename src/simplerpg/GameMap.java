@@ -13,7 +13,7 @@ public class GameMap {
         obstMap[3][5] = 'S';        
         obstMap[4][8] = 'X';
     }
-    
+
     public char getObstValue(int x, int y)
     {
         return obstMap[y][x];

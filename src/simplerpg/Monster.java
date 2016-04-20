@@ -1,26 +1,35 @@
 package simplerpg;
 
 public class Monster extends GameCharacter {
-    
-    public Monster(String _charClass, String _name, int _strength, int _dexterity, int _endurance)
-    {
-        super(_charClass, _name, _strength, _dexterity, _endurance);
+
+    public Monster(CharClass _monsterClass, String _name) {
+        super(_monsterClass, _name);
         myInv = new Inventory();
         myInv.add(new Item("Слабое зелье лечения", Item.ItemType.Consumables));
         myInv.addSomeCoins(100);
     }
-    
-    public void lvlUp(int _l)
-    {
-        for(int i=0;i<_l;i++)
-        {
-            strength += base_strength * 0.3f;
-            dexterity += base_dexterity * 0.3f;
-            endurance += base_endurance * 0.3f;            
-           
-            calculateSecondaryParameters();
-            hp = hpMax;
-        }
+
+    public void lvlUp(int _l) {
+        if (_l > 1 && level<_l) {
+            int points = (6 + _l * 2);
+
+            int x = Utils.rand.nextInt(points);
+            System.out.print(x + " ");
+            int y = Utils.rand.nextInt(points - x);
+            System.out.print(y + " ");
+            int z = points - y - x;
+            System.out.print(z + " ");
+            charClass.addStrength(x);
+            charClass.addDexterity(y);
+            charClass.addEndurance(z);
+            calculateParameters();
+            fullHeal();
+            level++;
+            showFullInfo();
+        } else return;
     }
-    
 }
+
+
+    
+
